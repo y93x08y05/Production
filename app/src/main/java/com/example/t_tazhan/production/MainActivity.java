@@ -23,6 +23,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.t_tazhan.production.Image.ImageBrowseActivity;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -31,13 +33,11 @@ import java.util.TreeMap;
 
 import static com.example.t_tazhan.production.util.AzureMLClient.getPoint;
 import static com.example.t_tazhan.production.util.AzureMLClient.requestResponse;
-import static com.example.t_tazhan.production.util.AzureMLClient.response;
 import static com.example.t_tazhan.production.util.AzureMLClient.transferBeacon;
 import static com.example.t_tazhan.production.util.Constant.getBeacon;
 import static com.example.t_tazhan.production.util.Constant.ifConclude;
 import static com.example.t_tazhan.production.util.Constant.map;
 import static com.example.t_tazhan.production.util.Constant.set;
-import static com.example.t_tazhan.production.util.FileSave.saveFile;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -140,6 +140,7 @@ public class MainActivity extends AppCompatActivity {
     int timeFlag;
     boolean endFlag = false;
     public void onClick_Search(View v) {
+        startActivity(new Intent(this, ImageBrowseActivity.class));
         countTime = 0;
         timeFlag= Integer.valueOf(timerDuration)*1000;
         thread = new Thread(runnable1);
@@ -152,7 +153,6 @@ public class MainActivity extends AppCompatActivity {
         if (bluetoothAdapter.isDiscovering()) {
             bluetoothAdapter.cancelDiscovery();
         }
-        saveFile(sb1.append(sb2).toString(),X,Y);
         textX.getText().clear();
         textY.getText().clear();
         textTimer.getText().clear();
@@ -212,7 +212,6 @@ public class MainActivity extends AppCompatActivity {
             System.out.println(textTimer.getText().toString());
         }
     };
-    StringBuilder sb2 = new StringBuilder();
 
     Handler handlerCountTimer = new Handler(){
         @Override
