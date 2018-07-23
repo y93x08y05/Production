@@ -32,6 +32,9 @@ import java.util.TimerTask;
 import java.util.TreeMap;
 
 import static com.example.t_tazhan.production.Image.ImageBrowseActivity.initData;
+import static com.example.t_tazhan.production.Image.ImgBrowsePagerAdapter.height;
+import static com.example.t_tazhan.production.Image.ImgBrowsePagerAdapter.layoutContent;
+import static com.example.t_tazhan.production.Image.ImgBrowsePagerAdapter.width;
 import static com.example.t_tazhan.production.util.AzureMLClient.getPoint;
 import static com.example.t_tazhan.production.util.AzureMLClient.requestBody;
 import static com.example.t_tazhan.production.util.AzureMLClient.requestResponse;
@@ -39,7 +42,6 @@ import static com.example.t_tazhan.production.util.AzureMLClient.transferBeacon;
 import static com.example.t_tazhan.production.util.Constant.getBeacon;
 import static com.example.t_tazhan.production.util.Constant.ifConclude;
 import static com.example.t_tazhan.production.util.Constant.map;
-import static com.example.t_tazhan.production.util.Constant.set;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -289,10 +291,20 @@ public class MainActivity extends AppCompatActivity {
     }
     public  void getBeaconMessage(TreeMap<String,String> map,View view){
         getAPIRequest(map);
-//        startActivity(new Intent(this, ImageBrowseActivity.class));
+        locationX = locationX + 1;
+        locationY = locationY + 2;
+        initData();
+        updatePoint();
     }
-    public static int locationX;//定位的坐标点x
-    public static int locationY;//定位的坐标点y
+    private void updatePoint() {
+        runOnUiThread(new Runnable() {
+            public void run() {
+                layoutContent.addPoints(width,height);
+            }
+        });
+    }
+    public static int locationX = 1;//定位的坐标点x
+    public static int locationY = 2;//定位的坐标点y
     public static String [] strings;
     public static void getAPIRequest(TreeMap<String,String> map) {
         try {
@@ -304,8 +316,8 @@ public class MainActivity extends AppCompatActivity {
             String temp3 = getPoint(temp2);
             System.out.println("temp3" + temp3);
             strings = temp3.split(",");
-            locationX = Integer.parseInt(strings[0]);
-            locationY = Integer.parseInt(strings[1]);
+//            locationX = Integer.parseInt(strings[0]);
+//            locationY = Integer.parseInt(strings[1]);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -43,6 +43,9 @@ public class ImageBrowseActivity extends AppCompatActivity {
         PointSimple pointSimple1 = new PointSimple();
         pointSimple1.width_scale = 0.36f;
         pointSimple1.height_scale = 0.75f;
+        pointSimple1.pointX = locationX;
+        pointSimple1.pointY = locationY;
+        System.out.println("ImageBrowserActivity" + locationX + " " + locationY);
         pointSimples.add(pointSimple1);
         imgSimple1.pointSimples = pointSimples;
         imgSimples.add(imgSimple1);

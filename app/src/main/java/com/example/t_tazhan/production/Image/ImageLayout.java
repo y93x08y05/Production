@@ -72,7 +72,6 @@ public class ImageLayout extends FrameLayout implements View.OnClickListener {
         lp1.height = height;
         layoutPoints.setLayoutParams(lp1);
         addPoints(width, height);
-
     }
 
     public void setPoints(ArrayList<PointSimple> points) {
@@ -80,22 +79,21 @@ public class ImageLayout extends FrameLayout implements View.OnClickListener {
         this.points = points;
     }
 
-    public void addPoints(int width, int height) {
-
+    public  void addPoints(int width, int height) {
+        System.out.println("addPoints进来了几次");
         layoutPoints.removeAllViews();
-
         for (int i = 0; i < points.size(); i++) {
+            points.get(i).setPointX(locationX);
+            points.get(i).setPointY(locationY);
             LinearLayout view = (LinearLayout) LayoutInflater.from(mContext).inflate(R.layout.layout_img_point, this, false);
             ImageView imageView = view.findViewById(R.id.imgPoint);
             imageView.setTag(i);
             AnimationDrawable animationDrawable = (AnimationDrawable) imageView.getDrawable();
             animationDrawable.start();
             LayoutParams layoutParams = (LayoutParams) view.getLayoutParams();
-            layoutParams.leftMargin = (int)(width/30 * 2 * 7 - width/30 * 2 * 0.5);
-            layoutParams.topMargin = (int)(height/50 * 2 * 20 - height/50 * 2 * 0.5);
-            System.out.println("locationX" + layoutParams.leftMargin + "locationY" + layoutParams.topMargin);
+            layoutParams.leftMargin = (int)(width/30 * 2 * points.get(i).pointX - width/30 * 2 * 0.5);
+            layoutParams.topMargin = (int)(height/50 * 2 * points.get(i).pointY - height/50 * 2 * 0.5);
             imageView.setOnClickListener(this);
-
             layoutPoints.addView(view, layoutParams);
         }
     }

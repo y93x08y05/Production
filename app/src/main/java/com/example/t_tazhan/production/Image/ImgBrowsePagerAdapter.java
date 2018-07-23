@@ -15,13 +15,14 @@ import java.util.List;
 
 public class ImgBrowsePagerAdapter extends PagerAdapter {
 
-    List<ImgSimple> imgSimples;
+    public static List<ImgSimple> imgSimples;
 
-    List<View> views;
+    public static List<View> views;
 
-    Activity mContext;
+    public static Activity mContext;
 
-    private int width;
+    public static int width;
+    public static int height;
 
     public ImgBrowsePagerAdapter(Activity context, List<ImgSimple> imgSimples) {
 
@@ -51,17 +52,17 @@ public class ImgBrowsePagerAdapter extends PagerAdapter {
 
         container.removeView((View) object);
     }
-
+    public static ImageLayout layoutContent;
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
 
         LinearLayout view = (LinearLayout) LayoutInflater.from(mContext).inflate(R.layout.layout_img_browse, null);
-        ImageLayout layoutContent = view.findViewById(R.id.layoutContent);
+        layoutContent = view.findViewById(R.id.layoutContent);
         try {
             float scale = imgSimples.get(position).scale;
             ArrayList<PointSimple> pointSimples = imgSimples.get(position).pointSimples;
             layoutContent.setPoints(pointSimples);
-            int height = (int) (width * scale);
+            height = (int) (width * scale);
             layoutContent.setImgBg(width, height);
         } catch (Exception e) {
             e.printStackTrace();
