@@ -31,7 +31,9 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.TreeMap;
 
+import static com.example.t_tazhan.production.Image.ImageBrowseActivity.initData;
 import static com.example.t_tazhan.production.util.AzureMLClient.getPoint;
+import static com.example.t_tazhan.production.util.AzureMLClient.requestBody;
 import static com.example.t_tazhan.production.util.AzureMLClient.requestResponse;
 import static com.example.t_tazhan.production.util.AzureMLClient.transferBeacon;
 import static com.example.t_tazhan.production.util.Constant.getBeacon;
@@ -145,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
         timeFlag= Integer.valueOf(timerDuration)*1000;
         thread = new Thread(runnable1);
         thread.start();
-        startTimer();
+        startTimer(v);
     }
     public void onClick_End(View view) {
         endFlag = true;
@@ -259,10 +261,10 @@ public class MainActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
                 bluetoothAdapter.cancelDiscovery();
-                if (lst_Devices.size() > 0) {
-                    map.clear();
-                    set.clear();
-                }
+//                if (lst_Devices.size() > 0) {
+//                    map.clear();
+//                    set.clear();
+//                }
                 for (int j = 0; j < lst_Devices.size(); j++) {
                     map.put(lst_Devices.get(j).split(" ")[0],lst_Devices.get(j).split(" ")[1]);
                 }
@@ -272,20 +274,36 @@ public class MainActivity extends AppCompatActivity {
     };
     Timer timer;
     TimerTask timerTask;
-    public void startTimer(){
+    public void startTimer(View view){
         timer = new Timer();
-        getBeaconMessage(map);
+        initializeTimerTask(view);
         timer.schedule(timerTask,0,3000);
     }
-    public void getBeaconMessage(TreeMap<String,String> map){
+    public void initializeTimerTask(final View view) {
+        timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                getBeaconMessage(map,view);
+            }
+        };
+    }
+    public  void getBeaconMessage(TreeMap<String,String> map,View view){
         getAPIRequest(map);
+//        startActivity(new Intent(this, ImageBrowseActivity.class));
     }
     public static int locationX;//定位的坐标点x
     public static int locationY;//定位的坐标点y
     public static String [] strings;
-    public void getAPIRequest(TreeMap<String,String> map) {
+    public static void getAPIRequest(TreeMap<String,String> map) {
         try {
-            strings = getPoint(requestResponse(transferBeacon(map))).split(",");
+            String temp1 = transferBeacon(map);
+            System.out.println("temp1" + temp1);
+            String temp2 = requestResponse(requestBody);
+            System.out.println(requestResponse(requestBody));
+            System.out.println("temp2" + temp2);
+            String temp3 = getPoint(temp2);
+            System.out.println("temp3" + temp3);
+            strings = temp3.split(",");
             locationX = Integer.parseInt(strings[0]);
             locationY = Integer.parseInt(strings[1]);
         } catch (Exception e) {

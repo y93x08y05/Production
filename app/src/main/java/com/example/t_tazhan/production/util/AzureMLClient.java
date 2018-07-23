@@ -12,7 +12,7 @@ public class AzureMLClient {
     public static HashMap<Integer,String> map;
     private static String endPointURL = "https://ussouthcentral.services.azureml.net/workspaces/f06b40ea77054bb2a012415b06082698/services/b29e0acade724cccbf9234e0ce25c2c0/execute?api-version=2.0&details=true\n";
     private static String key= "Bs6aXj46rwuvaJulO+KsG4s8DUWzCxhxcIyamwoR4H/ur/CPoGhItPj9ao5AX7SuHuG8pLGIba0zjviRWgRsRA==";
-    private static String requestBody = "{\n" +
+    public static String requestBody = "{\n" +
             "  \"Inputs\": {\n" +
             "    \"input1\": {\n" +
             "      \"ColumnNames\": [\n" +
@@ -123,13 +123,13 @@ public class AzureMLClient {
         BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
         
         String decodedString;
-        String responseString="";    
+        StringBuilder responseString = new StringBuilder();
 
         while ((decodedString = in.readLine()) != null) 
     	  {
-            response+=decodedString;
+            responseString.append(decodedString).append("\r");
         }
-    	  return responseString;
+    	  return responseString.toString();
      }
     public static JSONObject jsonObject;
     public static String temp;
@@ -139,13 +139,15 @@ public class AzureMLClient {
             JSONObject jsonObject1 = jsonObject.getJSONObject("Results").getJSONObject("output1").getJSONObject("value");
             String s1 = jsonObject1.getJSONArray("Values").getJSONArray(0).toString();
             input = Integer.parseInt(String.valueOf(s1.charAt(2)));
-            temp = putValue(input);
+            temp = arr[input-1];
+//            temp = putValue(input);
         } catch (JSONException e) {
             e.printStackTrace();
         } finally {
             return temp;
         }
     }
+    public static String [] arr = {"5,5","14,3","24,7","24,9","24,3"};
     public static int a = 1;
     public static int input;
     public static String areaCode;
@@ -155,7 +157,7 @@ public class AzureMLClient {
         map.put(3, "24,7");
         map.put(4, "24,9");
         map.put(5, "24,3");
-        areaCode = map.get(value - 1);
+        areaCode = map.get(value);
         return areaCode;
     }
 }

@@ -5,7 +5,7 @@
     android:gravity="center"
     android:orientation="vertical">
 
-    <com.example.t_tazhan.ms.view.ImageLayout
+    <com.example.t_tazhan.production.Image.ImageLayout
         android:id="@+id/layoutContent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

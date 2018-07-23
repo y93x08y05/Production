@@ -20,13 +20,13 @@ import static com.example.t_tazhan.production.MainActivity.locationY;
 
 public class ImageLayout extends FrameLayout implements View.OnClickListener {
 
-    ArrayList<PointSimple> points;
+    public static ArrayList<PointSimple> points;
 
-    FrameLayout layoutPoints;
+    public static FrameLayout layoutPoints;
 
     ImageView imgBg;
 
-    Context mContext;
+    public static Context mContext;
 
     public ImageLayout(Context context) {
         this(context, null);
@@ -80,7 +80,7 @@ public class ImageLayout extends FrameLayout implements View.OnClickListener {
         this.points = points;
     }
 
-    private void addPoints(int width, int height) {
+    public void addPoints(int width, int height) {
 
         layoutPoints.removeAllViews();
 
@@ -91,8 +91,9 @@ public class ImageLayout extends FrameLayout implements View.OnClickListener {
             AnimationDrawable animationDrawable = (AnimationDrawable) imageView.getDrawable();
             animationDrawable.start();
             LayoutParams layoutParams = (LayoutParams) view.getLayoutParams();
-            layoutParams.leftMargin = (int)(width/30 * 2 * locationX - width/30 * 2 * 0.5);
-            layoutParams.topMargin = (int)(height/50 * 2 * locationY - height/50 * 2 * 0.5);
+            layoutParams.leftMargin = (int)(width/30 * 2 * 7 - width/30 * 2 * 0.5);
+            layoutParams.topMargin = (int)(height/50 * 2 * 20 - height/50 * 2 * 0.5);
+            System.out.println("locationX" + layoutParams.leftMargin + "locationY" + layoutParams.topMargin);
             imageView.setOnClickListener(this);
 
             layoutPoints.addView(view, layoutParams);

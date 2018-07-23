@@ -10,11 +10,14 @@ import com.example.t_tazhan.production.R;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.t_tazhan.production.MainActivity.locationX;
+import static com.example.t_tazhan.production.MainActivity.locationY;
+
 public class ImageBrowseActivity extends AppCompatActivity {
 
     private ViewPager viewPagerImg;
 
-    private List<ImgSimple> imgSimples;
+    private static List<ImgSimple> imgSimples;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +35,7 @@ public class ImageBrowseActivity extends AppCompatActivity {
 
     }
 
-    private void initData() {
+    public static void initData( ) {
         imgSimples = new ArrayList<>();
         ImgSimple imgSimple1 = new ImgSimple();
         imgSimple1.scale = 1.6f;
@@ -41,6 +44,7 @@ public class ImageBrowseActivity extends AppCompatActivity {
         pointSimple1.width_scale = 0.36f;
         pointSimple1.height_scale = 0.75f;
         pointSimples.add(pointSimple1);
+        imgSimple1.pointSimples = pointSimples;
         imgSimples.add(imgSimple1);
     }
 }
