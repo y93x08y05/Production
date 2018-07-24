@@ -46,6 +46,16 @@ public class Constant {
         return value;
     }
     public static TreeMap<String,String> map = new TreeMap<String, String>();
+    public static void storageValue() {
+        map.put("A","0");
+        map.put("B","0");
+        map.put("C","0");
+        map.put("D","0");
+        map.put("E","0");
+        map.put("F","0");
+        map.put("G","0");
+        map.put("H","0");
+    }
     public static Set<String> set ;
     public static void ifConclude(TreeMap<String,String> map) {
         set = map.keySet();
@@ -73,5 +83,6 @@ public class Constant {
         if (!set.contains("H")) {
             map.put("H","0");
         }
+//        set.clear();
     }
 }

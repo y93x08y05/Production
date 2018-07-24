@@ -11,7 +11,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Handler;
-import android.os.Message;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -42,6 +41,8 @@ import static com.example.t_tazhan.production.util.AzureMLClient.transferBeacon;
 import static com.example.t_tazhan.production.util.Constant.getBeacon;
 import static com.example.t_tazhan.production.util.Constant.ifConclude;
 import static com.example.t_tazhan.production.util.Constant.map;
+import static com.example.t_tazhan.production.util.Constant.set;
+import static com.example.t_tazhan.production.util.Constant.storageValue;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -141,15 +142,13 @@ public class MainActivity extends AppCompatActivity {
         }
         unregisterReceiver(mReceiver);
     }
-    int timeFlag;
+//    int timeFlag;
     boolean endFlag = false;
     public void onClick_Search(View v) {
         startActivity(new Intent(this, ImageBrowseActivity.class));
         countTime = 0;
-        timeFlag= Integer.valueOf(timerDuration)*1000;
-        thread = new Thread(runnable1);
-        thread.start();
-        startTimer(v);
+        startTimer();
+        startTimer1();
     }
     public void onClick_End(View view) {
         endFlag = true;
@@ -161,7 +160,6 @@ public class MainActivity extends AppCompatActivity {
         textY.getText().clear();
         textTimer.getText().clear();
         textView.setText(String.valueOf(0));
-        timerDuration = "8";
     }
     private TextWatcher textWatcher1 = new TextWatcher() {
         @Override
@@ -217,25 +215,6 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    Handler handlerCountTimer = new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            String message = msg.obj.toString();
-            textView.setText(message);
-        }
-    };
-    private void updateCount() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Message msg = new Message();
-                msg.obj = ++countTime;
-                handlerCountTimer.sendMessage(msg);
-            }
-        }).start();
-    }
-
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
     private static String[] PERMISSIONS_STORAGE = {
             Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -248,51 +227,56 @@ public class MainActivity extends AppCompatActivity {
                     REQUEST_EXTERNAL_STORAGE);
         }
     }
-    private Thread thread;
-    private Runnable runnable1 = new Runnable() {
-        @Override
-        public void run() {
+    Timer timer;
+    TimerTask timerTask;
+    public void startTimer(){
+        storageValue();
+        timer = new Timer();
+        initializeTimerTask();
+        timer.schedule(timerTask,0,10000);
+    }
+    public void initializeTimerTask() {
+        timerTask = new TimerTask() {
+            @Override
+            public void run() {
                 if (endFlag) {
                     return;
                 }
-                updateCount();
-                bluetoothAdapter.startDiscovery();
-                try {
-                    Thread.sleep(timeFlag);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                if (bluetoothAdapter.isDiscovering()) {
+                    bluetoothAdapter.cancelDiscovery();
                 }
-                bluetoothAdapter.cancelDiscovery();
+                bluetoothAdapter.startDiscovery();
 //                if (lst_Devices.size() > 0) {
 //                    map.clear();
-//                    set.clear();
 //                }
                 for (int j = 0; j < lst_Devices.size(); j++) {
                     map.put(lst_Devices.get(j).split(" ")[0],lst_Devices.get(j).split(" ")[1]);
                 }
                 ifConclude(map);
                 lst_Devices.clear();
-        }
-    };
-    Timer timer;
-    TimerTask timerTask;
-    public void startTimer(View view){
-        timer = new Timer();
-        initializeTimerTask(view);
-        timer.schedule(timerTask,0,3000);
+            }
+        };
+        System.out.println("输出多少次");
     }
-    public void initializeTimerTask(final View view) {
-        timerTask = new TimerTask() {
+    Timer timer1;
+    TimerTask timerTask1;
+    public void startTimer1(){
+        timer1 = new Timer();
+        initializeTimerTask1();
+        timer1.schedule(timerTask1,0,5000);
+    }
+    public void initializeTimerTask1() {
+        timerTask1 = new TimerTask() {
             @Override
             public void run() {
-                getBeaconMessage(map,view);
+                getBeaconMessage(map);
             }
         };
     }
-    public  void getBeaconMessage(TreeMap<String,String> map,View view){
+    public  void getBeaconMessage(TreeMap<String,String> map){
         getAPIRequest(map);
-        locationX = locationX + 1;
-        locationY = locationY + 2;
+     //   locationX = 3;
+     //   location Y;
         initData();
         updatePoint();
     }
@@ -303,21 +287,20 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-    public static int locationX = 1;//定位的坐标点x
-    public static int locationY = 2;//定位的坐标点y
+    public static int locationX = 7;//定位的坐标点x
+    public static int locationY = 20;//定位的坐标点y
     public static String [] strings;
     public static void getAPIRequest(TreeMap<String,String> map) {
         try {
             String temp1 = transferBeacon(map);
             System.out.println("temp1" + temp1);
-            String temp2 = requestResponse(requestBody);
-            System.out.println(requestResponse(requestBody));
+            String temp2 = requestResponse(temp1);
             System.out.println("temp2" + temp2);
             String temp3 = getPoint(temp2);
             System.out.println("temp3" + temp3);
             strings = temp3.split(",");
-//            locationX = Integer.parseInt(strings[0]);
-//            locationY = Integer.parseInt(strings[1]);
+            locationX = Integer.parseInt(strings[0]);
+            locationY = Integer.parseInt(strings[1]);
         } catch (Exception e) {
             e.printStackTrace();
         }

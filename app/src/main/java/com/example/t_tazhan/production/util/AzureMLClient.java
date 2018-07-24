@@ -7,11 +7,12 @@ import java.net.*;
 import java.io.*;
 import java.util.*;
 
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocketFactory;
+
 public class AzureMLClient {
-    public static String response;
-    public static HashMap<Integer,String> map;
-    private static String endPointURL = "https://ussouthcentral.services.azureml.net/workspaces/f06b40ea77054bb2a012415b06082698/services/b29e0acade724cccbf9234e0ce25c2c0/execute?api-version=2.0&details=true\n";
-    private static String key= "Bs6aXj46rwuvaJulO+KsG4s8DUWzCxhxcIyamwoR4H/ur/CPoGhItPj9ao5AX7SuHuG8pLGIba0zjviRWgRsRA==";
+    private static String endPointURL = "https://ussouthcentral.services.azureml.net/workspaces/f06b40ea77054bb2a012415b06082698/services/f234e6385c0c491cb343d013067e8ee8/execute?api-version=2.0&details=true\n";
+    private static String key= "/bFwuPdF99daya1iRfEZyFV3mJb+9CGf51H7ut4LE1iyrtRM6MFlx5RN9rdE+hpdVQp4PHnkxjp9oXugyPRZuA==";
     public static String requestBody = "{\n" +
             "  \"Inputs\": {\n" +
             "    \"input1\": {\n" +
@@ -74,10 +75,10 @@ public class AzureMLClient {
                         "}";
     private static String requestBody3 = "],\n" +
                         "        [\n";
-    public static String A,B,C,D,E,F,G,H;
+    public static String A = "0",B = "0",C = "0",D = "0",E = "0",F = "0",G = "0",H = "0";
       public static StringBuilder stringBuilder = new StringBuilder();
       public static String transferBeacon(TreeMap<String,String> map){
-            for (int i=0;i<map.size();i++) {
+          System.out.println("信标map的大小为：" + map.size());
                 A = map.get("A");
                 B = map.get("B");
                 C = map.get("C");
@@ -86,7 +87,8 @@ public class AzureMLClient {
                 F = map.get("F");
                 G = map.get("G");
                 H = map.get("H");
-            }
+          System.out.println("输出信标值：" + A + " " +
+                  B + " " + C + " " + D + " " + E + " " + F + " " + G + " " + H + " ");
             stringBuilder.append(requestBody1);
             appendString();
             stringBuilder.append(requestBody3);
@@ -95,42 +97,47 @@ public class AzureMLClient {
             return stringBuilder.toString();
       }
       public static void appendString(){
-          stringBuilder.append("\"").append(A).append("\"").append("\n");
-          stringBuilder.append("\"").append(B).append("\"").append("\n");
-          stringBuilder.append("\"").append(C).append("\"").append("\n");
-          stringBuilder.append("\"").append(D).append("\"").append("\n");
-          stringBuilder.append("\"").append(E).append("\"").append("\n");
-          stringBuilder.append("\"").append(F).append("\"").append("\n");
-          stringBuilder.append("\"").append(G).append("\"").append("\n");
-          stringBuilder.append("\"").append(H).append("\"").append("\n");
+          stringBuilder.append("\"").append(A).append("\"").append(",").append("\n");
+          stringBuilder.append("\"").append(B).append("\"").append(",").append("\n");
+          stringBuilder.append("\"").append(C).append("\"").append(",").append("\n");
+          stringBuilder.append("\"").append(D).append("\"").append(",").append("\n");
+          stringBuilder.append("\"").append(E).append("\"").append(",").append("\n");
+          stringBuilder.append("\"").append(F).append("\"").append(",").append("\n");
+          stringBuilder.append("\"").append(G).append("\"").append(",").append("\n");
+          stringBuilder.append("\"").append(H).append("\"").append(",").append("\n");
       }
-      public static String requestResponse( String requestBody ) throws Exception {
-        URL u = new URL(endPointURL);
-        HttpURLConnection conn = (HttpURLConnection) u.openConnection();
-
-        conn.setRequestProperty("Authorization","Bearer "+ key);
-        conn.setRequestProperty("Content-Type","application/json");
-        conn.setRequestMethod("POST");
-        
-        String body= new String(requestBody);
-        
-        conn.setDoOutput(true);
-        OutputStreamWriter wr=new OutputStreamWriter(conn.getOutputStream());
-
-        wr.write(body);
-        wr.close();
-
-        BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-        
-        String decodedString;
-        StringBuilder responseString = new StringBuilder();
-
-        while ((decodedString = in.readLine()) != null) 
-    	  {
-            responseString.append(decodedString).append("\r");
-        }
-    	  return responseString.toString();
-     }
+      public static String requestResponse( String requestBody ) {
+          HttpURLConnection conn = null;
+          StringBuilder responseString = new StringBuilder();
+              try {
+                  URL u = new URL(endPointURL);
+                  conn = (HttpURLConnection) u.openConnection();
+                  conn.setRequestProperty("Authorization","Bearer "+ key);
+                  conn.setRequestProperty("Content-Type","application/json");
+                  conn.setRequestMethod("POST");
+                  conn.setDoOutput(true);
+                  String body= new String(requestBody);
+                  OutputStreamWriter wr=new OutputStreamWriter(conn.getOutputStream());
+                  wr.write(body);
+                  wr.close();
+                  BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                  String decodedString;
+                  while ((decodedString = in.readLine()) != null) {
+                      responseString.append(decodedString).append("\r");
+                  }
+              } catch (IOException e) {
+                  e.printStackTrace();
+              } finally {
+                  if (conn != null) {
+                      try {
+                          conn.getInputStream().close();
+                      } catch (IOException e) {
+                          e.printStackTrace();
+                      }
+                  }
+                  return responseString.toString();
+              }
+      }
     public static JSONObject jsonObject;
     public static String temp;
     public static String getPoint(String s){
@@ -140,24 +147,13 @@ public class AzureMLClient {
             String s1 = jsonObject1.getJSONArray("Values").getJSONArray(0).toString();
             input = Integer.parseInt(String.valueOf(s1.charAt(2)));
             temp = arr[input-1];
-//            temp = putValue(input);
         } catch (JSONException e) {
             e.printStackTrace();
         } finally {
             return temp;
         }
     }
-    public static String [] arr = {"5,5","14,3","24,7","24,9","24,3"};
+    public static String [] arr = {"1,1","2,1","3,2","3,3","3,1"};
     public static int a = 1;
     public static int input;
-    public static String areaCode;
-    public static String putValue(int value) {
-        map.put(1, "5,5");
-        map.put(2, "14,3");
-        map.put(3, "24,7");
-        map.put(4, "24,9");
-        map.put(5, "24,3");
-        areaCode = map.get(value);
-        return areaCode;
-    }
 }

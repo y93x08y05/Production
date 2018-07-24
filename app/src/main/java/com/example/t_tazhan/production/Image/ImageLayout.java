@@ -78,9 +78,8 @@ public class ImageLayout extends FrameLayout implements View.OnClickListener {
 
         this.points = points;
     }
-
+    private int counter=0;
     public  void addPoints(int width, int height) {
-        System.out.println("addPoints进来了几次");
         layoutPoints.removeAllViews();
         for (int i = 0; i < points.size(); i++) {
             points.get(i).setPointX(locationX);
@@ -94,6 +93,8 @@ public class ImageLayout extends FrameLayout implements View.OnClickListener {
             layoutParams.leftMargin = (int)(width/30 * 2 * points.get(i).pointX - width/30 * 2 * 0.5);
             layoutParams.topMargin = (int)(height/50 * 2 * points.get(i).pointY - height/50 * 2 * 0.5);
             imageView.setOnClickListener(this);
+            counter++;
+            System.out.println("addPoints进来了" + counter + "次");
             layoutPoints.addView(view, layoutParams);
         }
     }
