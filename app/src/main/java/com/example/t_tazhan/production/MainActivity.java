@@ -35,13 +35,11 @@ import static com.example.t_tazhan.production.Image.ImgBrowsePagerAdapter.height
 import static com.example.t_tazhan.production.Image.ImgBrowsePagerAdapter.layoutContent;
 import static com.example.t_tazhan.production.Image.ImgBrowsePagerAdapter.width;
 import static com.example.t_tazhan.production.util.AzureMLClient.getPoint;
-import static com.example.t_tazhan.production.util.AzureMLClient.requestBody;
 import static com.example.t_tazhan.production.util.AzureMLClient.requestResponse;
 import static com.example.t_tazhan.production.util.AzureMLClient.transferBeacon;
 import static com.example.t_tazhan.production.util.Constant.getBeacon;
 import static com.example.t_tazhan.production.util.Constant.ifConclude;
 import static com.example.t_tazhan.production.util.Constant.map;
-import static com.example.t_tazhan.production.util.Constant.set;
 import static com.example.t_tazhan.production.util.Constant.storageValue;
 
 public class MainActivity extends AppCompatActivity {
@@ -142,7 +140,6 @@ public class MainActivity extends AppCompatActivity {
         }
         unregisterReceiver(mReceiver);
     }
-//    int timeFlag;
     boolean endFlag = false;
     public void onClick_Search(View v) {
         startActivity(new Intent(this, ImageBrowseActivity.class));
@@ -175,8 +172,6 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void afterTextChanged(Editable editable) {
             X = textX.getText().toString();
-            System.out.println(textX.getText().toString());
-
         }
     };
     private TextWatcher textWatcher2 = new TextWatcher() {
@@ -193,8 +188,6 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void afterTextChanged(Editable editable) {
             Y = textY.getText().toString();
-            System.out.println(textY.getText().toString());
-
         }
     };
     private TextWatcher textWatcher3 = new TextWatcher() {
@@ -211,7 +204,6 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void afterTextChanged(Editable editable) {
             timerDuration = textTimer.getText().toString();
-            System.out.println(textTimer.getText().toString());
         }
     };
 
@@ -246,9 +238,6 @@ public class MainActivity extends AppCompatActivity {
                     bluetoothAdapter.cancelDiscovery();
                 }
                 bluetoothAdapter.startDiscovery();
-//                if (lst_Devices.size() > 0) {
-//                    map.clear();
-//                }
                 for (int j = 0; j < lst_Devices.size(); j++) {
                     map.put(lst_Devices.get(j).split(" ")[0],lst_Devices.get(j).split(" ")[1]);
                 }
@@ -256,7 +245,6 @@ public class MainActivity extends AppCompatActivity {
                 lst_Devices.clear();
             }
         };
-        System.out.println("输出多少次");
     }
     Timer timer1;
     TimerTask timerTask1;
@@ -275,8 +263,6 @@ public class MainActivity extends AppCompatActivity {
     }
     public  void getBeaconMessage(TreeMap<String,String> map){
         getAPIRequest(map);
-     //   locationX = 3;
-     //   location Y;
         initData();
         updatePoint();
     }
@@ -293,11 +279,8 @@ public class MainActivity extends AppCompatActivity {
     public static void getAPIRequest(TreeMap<String,String> map) {
         try {
             String temp1 = transferBeacon(map);
-            System.out.println("temp1" + temp1);
             String temp2 = requestResponse(temp1);
-            System.out.println("temp2" + temp2);
             String temp3 = getPoint(temp2);
-            System.out.println("temp3" + temp3);
             strings = temp3.split(",");
             locationX = Integer.parseInt(strings[0]);
             locationY = Integer.parseInt(strings[1]);

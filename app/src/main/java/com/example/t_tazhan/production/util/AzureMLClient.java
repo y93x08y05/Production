@@ -78,7 +78,6 @@ public class AzureMLClient {
     public static String A = "0",B = "0",C = "0",D = "0",E = "0",F = "0",G = "0",H = "0";
       public static StringBuilder stringBuilder = new StringBuilder();
       public static String transferBeacon(TreeMap<String,String> map){
-          System.out.println("信标map的大小为：" + map.size());
                 A = map.get("A");
                 B = map.get("B");
                 C = map.get("C");
@@ -87,7 +86,7 @@ public class AzureMLClient {
                 F = map.get("F");
                 G = map.get("G");
                 H = map.get("H");
-          System.out.println("输出信标值：" + A + " " +
+          System.out.println("信标map的大小为：" + map.size() + "输出信标值：" + A + " " +
                   B + " " + C + " " + D + " " + E + " " + F + " " + G + " " + H + " ");
             stringBuilder.append(requestBody1);
             appendString();
