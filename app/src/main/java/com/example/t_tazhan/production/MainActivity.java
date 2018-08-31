@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.t_tazhan.production.Image.ImageBrowseActivity;
+import com.example.t_tazhan.production.util.AzureMLClient;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -142,6 +143,7 @@ public class MainActivity extends AppCompatActivity {
     }
     boolean endFlag = false;
     public void onClick_Search(View v) {
+        storageValue();
         startActivity(new Intent(this, ImageBrowseActivity.class));
         countTime = 0;
         startTimer();
@@ -222,7 +224,6 @@ public class MainActivity extends AppCompatActivity {
     Timer timer;
     TimerTask timerTask;
     public void startTimer(){
-        storageValue();
         timer = new Timer();
         initializeTimerTask();
         timer.schedule(timerTask,0,10000);
@@ -273,8 +274,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-    public static int locationX = 7;//定位的坐标点x
-    public static int locationY = 20;//定位的坐标点y
+    public static int locationX = 11;//定位的坐标点x
+    public static int locationY = 6;//定位的坐标点y
     public static void getAPIRequest(TreeMap<String,String> map) {
         try {
             String temp1 = transferBeacon(map);
