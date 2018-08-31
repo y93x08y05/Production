@@ -6,10 +6,6 @@ import org.json.JSONObject;
 import java.net.*;
 import java.io.*;
 import java.util.*;
-
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSocketFactory;
-
 public class AzureMLClient {
     private static String endPointURL = "https://ussouthcentral.services.azureml.net/workspaces/f06b40ea77054bb2a012415b06082698/services/f234e6385c0c491cb343d013067e8ee8/execute?api-version=2.0&details=true\n";
     private static String key= "/bFwuPdF99daya1iRfEZyFV3mJb+9CGf51H7ut4LE1iyrtRM6MFlx5RN9rdE+hpdVQp4PHnkxjp9oXugyPRZuA==";
@@ -106,6 +102,7 @@ public class AzureMLClient {
           stringBuilder.append("\"").append(H).append("\"").append(",").append("\n");
       }
       public static String requestResponse( String requestBody ) {
+          createData(arr);
           HttpURLConnection conn = null;
           StringBuilder responseString = new StringBuilder();
               try {
@@ -138,21 +135,35 @@ public class AzureMLClient {
               }
       }
     public static JSONObject jsonObject;
-    public static String temp;
-    public static String getPoint(String s){
+    public static List<Integer> temp;
+    public static List<Integer> getPoint(String s){
         try {
             jsonObject = new JSONObject(s);
             JSONObject jsonObject1 = jsonObject.getJSONObject("Results").getJSONObject("output1").getJSONObject("value");
             String s1 = jsonObject1.getJSONArray("Values").getJSONArray(0).toString();
             input = Integer.parseInt(String.valueOf(s1.charAt(2)));
-            temp = arr[input-1];
+            System.out.println("API Request"+input);
+            temp = getData(input);
         } catch (JSONException e) {
             e.printStackTrace();
         } finally {
             return temp;
         }
     }
-    public static String [] arr = {"1,1","2,1","3,2","3,3","3,1"};
     public static int a = 1;
     public static int input;
+    private static Map<Integer,List<Integer>> map=new HashMap<>();
+    private static int [][]arr={{5,2},{5,6},{5,11},{5,15},{5,19}, {5,23},
+            {11,2},{11,6},{11,11},{11,15},{11,19}, {11,23}};
+    private static void createData(int [][]arr) {
+        for (int i=0;i<12;i++) {
+            List<Integer> list=new ArrayList<>();
+            list.add(arr[i][0]);
+            list.add(arr[i][1]);
+            map.put(i+1,list);
+        }
+    }
+    private static List<Integer> getData(int key) {
+        return map.get(key);
+    }
 }

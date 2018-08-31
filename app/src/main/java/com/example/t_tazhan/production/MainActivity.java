@@ -275,15 +275,13 @@ public class MainActivity extends AppCompatActivity {
     }
     public static int locationX = 7;//定位的坐标点x
     public static int locationY = 20;//定位的坐标点y
-    public static String [] strings;
     public static void getAPIRequest(TreeMap<String,String> map) {
         try {
             String temp1 = transferBeacon(map);
             String temp2 = requestResponse(temp1);
-            String temp3 = getPoint(temp2);
-            strings = temp3.split(",");
-            locationX = Integer.parseInt(strings[0]);
-            locationY = Integer.parseInt(strings[1]);
+            List<Integer> temp3 = getPoint(temp2);
+            locationX = temp3.get(0);
+            locationY = temp3.get(1);
         } catch (Exception e) {
             e.printStackTrace();
         }

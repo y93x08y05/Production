@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Production</string>
+    <string name="endPointURL">https://ussouthcentral.services.azureml.net/workspaces/f06b40ea77054bb2a012415b06082698/services/f234e6385c0c491cb343d013067e8ee8/execute?api-version=2.0&amp;details=true</string>
 </resources>
